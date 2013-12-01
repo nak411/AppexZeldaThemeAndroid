@@ -9,13 +9,15 @@
         android:layout_height="wrap_content"
         android:text="@string/btn_launch_default"
         android:id="@+id/btnLaunchDefault"
-        android:onClick="onClick" />
+        android:onClick="onClick"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_launch_icon_selection"
         android:id="@+id/btnIconPicker"
-        android:layout_toRightOf="@+id/btnLaunchDefault"
-        android:onClick="onClick" />
+        android:onClick="onClick"
+        android:layout_below="@+id/btnLaunchDefault"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
