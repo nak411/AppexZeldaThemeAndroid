@@ -8,3 +8,4 @@ gen/
 *.apk
 *.ap_
 *.class
+*.swp
