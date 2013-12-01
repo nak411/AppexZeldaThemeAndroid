@@ -1,0 +1,10 @@
+#generate files
+bin/
+build/
+gen/
+.classpath
+.project
+.idea/
+*.apk
+*.ap_
+*.class
