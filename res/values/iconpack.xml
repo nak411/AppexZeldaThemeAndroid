@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="icon_pack" translatable="false">
+        <item>com_android_browser_browseractivity</item>
+        <item>com_dropbox_android_activity_dropboxbrowser</item>
+    </string-array>
+
+</resources>

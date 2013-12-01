@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Basic theme information -->
+    <string name="theme_title">Zelda Theme</string>
+    <string name="developer_name">Naveed Khan</string>
+    <!-- This (optional) link will appear at the end of the theme description -->
+    <string name="theme_description">Email: nak411@gmail.com</string>
+
+    <!-- Theme settings -->
+    <bool name="config_iconpack">true</bool>
+    <bool name="config_apexskin">false</bool>
+
+    <!-- The feature graphic will appear above the theme description -->
+    <string name="theme_feature">wall</string>
+
+    <!-- Each theme may have up to 5 preview images -->
+    <string name="theme_preview1">preview1</string>
+    <string name="theme_preview2">preview2</string>
+
+    <string name="btn_launch_default">Launch Default</string>
+    <string name="btn_launch_icon_selection">Launch Icon Picker</string>
+
+</resources>

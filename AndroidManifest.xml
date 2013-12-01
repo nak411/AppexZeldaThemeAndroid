@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.zeldaiconpack.zeldatheme"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="19"/>
+
+    <application
+        android:icon="@drawable/icon"
+        android:label="@string/theme_title" >
+        <activity
+            android:name="com.android.zeldaiconpack.zeldatheme.WelcomeActivity"
+            android:label="@string/theme_title" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="com.anddoes.launcher.THEME" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.android.zeldaiconpack.zeldatheme.DefaultSelectionActivity">
+        </activity>
+        <activity
+            android:name="com.android.zeldaiconpack.zeldatheme.IconPickerActivity"
+            android:parentActivityName="com.android.zeldaiconpack.zeldatheme.WelcomeActivity" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.android.zeldaiconpack.zeldatheme.WelcomeActivity" />
+
+        </activity>
+    </application>
+
+</manifest>
