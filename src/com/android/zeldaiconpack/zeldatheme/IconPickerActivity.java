@@ -25,6 +25,7 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
     private ArrayList<Integer> mIcons;
     private boolean mLoading;
     private AsyncTask<Void, Void, ArrayList<Integer>> task;
+    private IconAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +46,9 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
     private void initialize() {
         GridView gvIcons = (GridView) findViewById(R.id.gvIcons);
         mIcons = new ArrayList<Integer>();
+        mAdapter = new IconAdapter(this, mIcons);
+        gvIcons.setAdapter(mAdapter);
         retrieveResourceIds();
-        gvIcons.setAdapter(new IconAdapter(this, mIcons));
         gvIcons.setOnItemClickListener(this);
     }
 
@@ -85,6 +87,7 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
                 super.onPostExecute(iconIds);
                 //Do ui stuff here
                 mIcons.addAll(iconIds);
+
                 mLoading = false;
             }
         };
