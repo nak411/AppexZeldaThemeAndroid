@@ -7,8 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.zeldaiconpack.zeldatheme.R;
-
+import java.util.ArrayList;
 
 /**
  * Created by Naveed on 12/1/13.
@@ -17,14 +16,16 @@ import com.zeldaiconpack.zeldatheme.R;
 public class IconAdapter extends BaseAdapter {
 
     private Context mContext;
+    private ArrayList<Integer> mIcons;
 
-    public IconAdapter(Context c) {
+    public IconAdapter(Context c, ArrayList<Integer> iconIds) {
         mContext = c;
+        mIcons = iconIds;
     }
 
     @Override
     public int getCount() {
-        return mIcons.length;
+        return mIcons.size();
     }
 
     @Override
@@ -51,21 +52,7 @@ public class IconAdapter extends BaseAdapter {
         }else{
             ivIcon = (ImageView) convertView;
         }
-
-        ivIcon.setImageResource(mIcons[position]);
-
+        ivIcon.setImageResource(mIcons.get(position));
         return ivIcon;
     }
-
-    private Integer[] mIcons = {
-            R.drawable.angrybirds,
-            R.drawable.browser,
-            R.drawable.com_android_browser_browseractivity,
-            R.drawable.com_android_contacts_activities_dialtactsactivity,
-            R.drawable.com_android_contacts_activities_peopleactivity,
-            R.drawable.com_estrongs_android_pop_view_fileexploreractivity,
-            R.drawable.com_android_gallery3d_app_gallery,
-            R.drawable.com_android_providers_downloads_ui_downloadlist,
-            R.drawable.com_instagram_android_activity_maintabactivity
-    };
 }

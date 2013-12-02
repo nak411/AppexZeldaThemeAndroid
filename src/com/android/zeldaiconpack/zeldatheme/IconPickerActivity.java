@@ -3,6 +3,7 @@ package com.android.zeldaiconpack.zeldatheme;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,6 +12,9 @@ import android.widget.Toast;
 
 import com.android.zeldaiconpack.zeldatheme.adapters.IconAdapter;
 import com.zeldaiconpack.zeldatheme.R;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 /**
  * Created by Naveed on 11/30/13.
@@ -32,7 +36,26 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
 
     private void initialize() {
         GridView gvIcons = (GridView) findViewById(R.id.gvIcons);
-        gvIcons.setAdapter(new IconAdapter(this));
+
+
+        final Class<R.drawable> c = R.drawable.class;
+        final Field[] fields = c.getDeclaredFields();
+        ArrayList<Integer> icons = new ArrayList<Integer>();
+
+        for (int i = 0, max = fields.length; i < max; i++) {
+            final int resourceId;
+            try {
+                resourceId = fields[i].getInt(null);
+                String name = getResources().getResourceEntryName(resourceId);
+                Log.d("Resources Zelda", name);
+                if (name.startsWith("com_"))
+                    icons.add(resourceId);
+            } catch (Exception e) {
+                continue;
+            }
+    /* make use of resourceId for accessing Drawables here */
+        }
+        gvIcons.setAdapter(new IconAdapter(this, icons));
 
         gvIcons.setOnItemClickListener(this);
     }
