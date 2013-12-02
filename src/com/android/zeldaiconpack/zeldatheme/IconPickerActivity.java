@@ -34,7 +34,11 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
         if (getActionBar() != null) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
         initialize();
     }
 
