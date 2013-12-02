@@ -1,9 +1,9 @@
 package com.android.zeldaiconpack.zeldatheme;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,6 +22,10 @@ import java.util.ArrayList;
  */
 public class IconPickerActivity extends Activity implements AdapterView.OnItemClickListener {
 
+    private ArrayList<Integer> mIcons;
+    private boolean mLoading;
+    private AsyncTask<Void, Void, ArrayList<Integer>> task;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,28 +40,61 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
 
     private void initialize() {
         GridView gvIcons = (GridView) findViewById(R.id.gvIcons);
-
-
-        final Class<R.drawable> c = R.drawable.class;
-        final Field[] fields = c.getDeclaredFields();
-        ArrayList<Integer> icons = new ArrayList<Integer>();
-
-        for (int i = 0, max = fields.length; i < max; i++) {
-            final int resourceId;
-            try {
-                resourceId = fields[i].getInt(null);
-                String name = getResources().getResourceEntryName(resourceId);
-                Log.d("Resources Zelda", name);
-                if (name.startsWith("com_"))
-                    icons.add(resourceId);
-            } catch (Exception e) {
-                continue;
-            }
-    /* make use of resourceId for accessing Drawables here */
-        }
-        gvIcons.setAdapter(new IconAdapter(this, icons));
-
+        mIcons = new ArrayList<Integer>();
+        retrieveResourceIds();
+        gvIcons.setAdapter(new IconAdapter(this, mIcons));
         gvIcons.setOnItemClickListener(this);
+    }
+
+    private void retrieveResourceIds(){
+        task = new AsyncTask<Void, Void, ArrayList<Integer>>() {
+            @Override
+            protected void onPreExecute() {
+                mLoading = true;
+                super.onPreExecute();
+                //do ui stuff here
+            }
+
+            @Override
+            protected ArrayList<Integer> doInBackground(Void... params) {
+                final Class<R.drawable> c = R.drawable.class;
+                final Field[] fields = c.getDeclaredFields();
+                ArrayList<Integer> icons = new ArrayList<Integer>();
+                for (Field field : fields) {
+                    final int resourceId;
+                    try {
+                        resourceId = field.getInt(null);
+                        String name = getResources().getResourceEntryName(resourceId);
+                        if (name.startsWith("com_"))
+                            icons.add(resourceId);
+                    } catch (Exception e) {
+                        continue;
+                    }
+                    if(isCancelled())
+                        break;
+                }
+                return icons;
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<Integer> iconIds) {
+                super.onPostExecute(iconIds);
+                //Do ui stuff here
+                mIcons.addAll(iconIds);
+                mLoading = false;
+            }
+        };
+        task.execute();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mLoading){
+            //Allow interruption
+            task.cancel(true);
+        }
+        task = null;
     }
 
     /**
