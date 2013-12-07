@@ -71,6 +71,8 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
                     try {
                         resourceId = field.getInt(null);
                         String name = getResources().getResourceEntryName(resourceId);
+                        //Find a resources that starts with com or matches the 2 word pattern
+                        //Short circuit at "com_"
                         if (name.startsWith("com_") || name.matches("\\w+_\\w+"))
                             icons.add(resourceId);
                     } catch (Exception e) {
@@ -105,8 +107,7 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
     }
 
     /**
-     * Used up navigation on devices using 4.0
-     *
+     * Use up navigation on devices using 4.0
      * @param item the item selected
      * @return true on false depending on action completion
      */
