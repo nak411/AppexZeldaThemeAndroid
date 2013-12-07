@@ -71,7 +71,7 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
                     try {
                         resourceId = field.getInt(null);
                         String name = getResources().getResourceEntryName(resourceId);
-                        if (name.startsWith("com_"))
+                        if (name.startsWith("com_") || name.matches("\\w+_\\w+"))
                             icons.add(resourceId);
                     } catch (Exception e) {
                         continue;

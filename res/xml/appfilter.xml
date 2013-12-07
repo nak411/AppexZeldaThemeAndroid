@@ -21,7 +21,7 @@
         drawable="browser"/>
     <item
         component="ComponentInfo{com.google.android.browser/com.android.browser.BrowserActivity}"
-        drawable="browser"/>
+        drawable="com_android_browser_browseractivity"/>
 
     <!-- Dropbox -->
     <item
@@ -286,5 +286,10 @@
     <item
         component="ComponentInfo{com.zynga.words/com.zynga.words.ui.launch.WordsMainActivity}"
         drawable="com_zynga_words_ui_launch_wordsmainactivity"/>
+
+    <!-- Angry Birds -->
+    <item
+        component="ComponentInfo{com.rovio.angrybirdsseasons/com.rovio.fusion.App}"
+        drawable="com_rovio_fusion_app"/>
 
 </resources>
