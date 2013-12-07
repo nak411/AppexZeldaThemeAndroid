@@ -1,6 +1,7 @@
 package com.android.zeldaiconpack.zeldatheme;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -8,9 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.android.zeldaiconpack.zeldatheme.adapters.IconAdapter;
+import com.android.zeldaiconpack.zeldatheme.structures.Icon;
 import com.zeldaiconpack.zeldatheme.R;
 
 import java.lang.reflect.Field;
@@ -22,9 +23,9 @@ import java.util.ArrayList;
  */
 public class IconPickerActivity extends Activity implements AdapterView.OnItemClickListener {
 
-    private ArrayList<Integer> mIcons;
+    private ArrayList<Icon> mIcons;
     private boolean mLoading;
-    private AsyncTask<Void, Void, ArrayList<Integer>> task;
+    private AsyncTask<Void, Void, ArrayList<Icon>> task;
     private IconAdapter mAdapter;
 
     @Override
@@ -45,15 +46,19 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
 
     private void initialize() {
         GridView gvIcons = (GridView) findViewById(R.id.gvIcons);
-        mIcons = new ArrayList<Integer>();
+        mIcons = new ArrayList<Icon>();
         mAdapter = new IconAdapter(this, mIcons);
         gvIcons.setAdapter(mAdapter);
         retrieveResourceIds();
         gvIcons.setOnItemClickListener(this);
     }
 
-    private void retrieveResourceIds(){
-        task = new AsyncTask<Void, Void, ArrayList<Integer>>() {
+    /**
+     * Retrieves the drawables from res folder
+     */
+    private void retrieveResourceIds() {
+
+        task = new AsyncTask<Void, Void, ArrayList<Icon>>() {
             @Override
             protected void onPreExecute() {
                 mLoading = true;
@@ -62,10 +67,10 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
             }
 
             @Override
-            protected ArrayList<Integer> doInBackground(Void... params) {
+            protected ArrayList<Icon> doInBackground(Void... params) {
                 final Class<R.drawable> c = R.drawable.class;
                 final Field[] fields = c.getDeclaredFields();
-                ArrayList<Integer> icons = new ArrayList<Integer>();
+                ArrayList<Icon> icons = new ArrayList<Icon>();
                 for (Field field : fields) {
                     final int resourceId;
                     try {
@@ -74,21 +79,21 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
                         //Find a resources that starts with com or matches the 2 word pattern
                         //Short circuit at "com_"
                         if (name.startsWith("com_") || name.matches("\\w+_\\w+"))
-                            icons.add(resourceId);
+                            icons.add(new Icon(resourceId));
                     } catch (Exception e) {
                         continue;
                     }
-                    if(isCancelled())
+                    if (isCancelled())
                         break;
                 }
                 return icons;
             }
 
             @Override
-            protected void onPostExecute(ArrayList<Integer> iconIds) {
-                super.onPostExecute(iconIds);
+            protected void onPostExecute(ArrayList<Icon> icons) {
+                super.onPostExecute(icons);
                 //Do ui stuff here
-                mIcons.addAll(iconIds);
+                mIcons.addAll(icons);
 
                 mLoading = false;
             }
@@ -99,7 +104,7 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
     @Override
     protected void onStop() {
         super.onStop();
-        if(mLoading){
+        if (mLoading) {
             //Allow interruption
             task.cancel(true);
         }
@@ -108,6 +113,7 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
 
     /**
      * Use up navigation on devices using 4.0
+     *
      * @param item the item selected
      * @return true on false depending on action completion
      */
@@ -124,6 +130,15 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(IconPickerActivity.this, "" + position, Toast.LENGTH_SHORT).show();
+        //Toggle selection
+        Icon icon = mIcons.get(position);
+        if(!icon.isSelected)
+        {
+            view.setBackgroundColor(Color.CYAN);
+            icon.isSelected = true;
+        }else{
+            view.setBackgroundColor(Color.TRANSPARENT);
+            icon.isSelected = false;
+        }
     }
 }

@@ -7,6 +7,8 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.android.zeldaiconpack.zeldatheme.structures.Icon;
+
 import java.util.ArrayList;
 
 /**
@@ -16,9 +18,9 @@ import java.util.ArrayList;
 public class IconAdapter extends BaseAdapter {
 
     private Context mContext;
-    private ArrayList<Integer> mIcons;
+    private ArrayList<Icon> mIcons;
 
-    public IconAdapter(Context c, ArrayList<Integer> iconIds) {
+    public IconAdapter(Context c, ArrayList<Icon> iconIds) {
         mContext = c;
         mIcons = iconIds;
     }
@@ -52,7 +54,7 @@ public class IconAdapter extends BaseAdapter {
         }else{
             ivIcon = (ImageView) convertView;
         }
-        ivIcon.setImageResource(mIcons.get(position));
+        ivIcon.setImageResource(mIcons.get(position).resId);
         return ivIcon;
     }
 }
