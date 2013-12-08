@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -42,6 +44,15 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
     protected void onStart() {
         super.onStart();
         initialize();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        //Inflate the menu items for use in action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.icon_picker_activity_actions, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     private void initialize() {
@@ -149,4 +160,6 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
             icon.isSelected = false;
         }
     }
+
+
 }

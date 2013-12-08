@@ -20,5 +20,6 @@
 
     <string name="btn_launch_default">Launch Default</string>
     <string name="btn_launch_icon_selection">Launch Icon Picker</string>
+    <string name="btn_save">Save</string>
 
 </resources>
