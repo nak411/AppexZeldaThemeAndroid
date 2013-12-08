@@ -9,15 +9,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvCount"
-        android:text="11212"
-        android:layout_gravity="center_vertical|right" />
+        android:text="@string/tv_counter"
+        android:layout_gravity="center_vertical|right"
+        android:singleLine="false" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/ivSave"
         android:src="@android:drawable/ic_menu_save"
         android:layout_gravity="right"
-        android:layout_toLeftOf="@+id/tvCount" />
+        android:contentDescription="@string/btn_save" />
 
 
 
