@@ -46,10 +46,18 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
 
     private void initialize() {
         GridView gvIcons = (GridView) findViewById(R.id.gvIcons);
-        mIcons = new ArrayList<Icon>();
-        mAdapter = new IconAdapter(this, mIcons);
-        gvIcons.setAdapter(mAdapter);
-        retrieveResourceIds();
+        if(mIcons == null)
+            mIcons = new ArrayList<Icon>();
+
+        if(mAdapter == null){
+            mAdapter = new IconAdapter(this, mIcons);
+            gvIcons.setAdapter(mAdapter);
+            retrieveResourceIds();
+        }else{
+            //Activity is being restored
+            gvIcons.setAdapter(mAdapter);
+        }
+
         gvIcons.setOnItemClickListener(this);
     }
 
@@ -94,7 +102,7 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
                 super.onPostExecute(icons);
                 //Do ui stuff here
                 mIcons.addAll(icons);
-
+                mAdapter.notifyDataSetChanged();
                 mLoading = false;
             }
         };
