@@ -142,6 +142,9 @@ public class IconPickerActivity extends Activity implements AdapterView.OnItemCl
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case R.id.btnSave:
+                //Save the icons here
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
