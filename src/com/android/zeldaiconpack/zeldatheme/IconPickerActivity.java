@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 public class IconPickerActivity extends Activity implements
         AdapterView.OnItemClickListener {
 
+    private static String TAG = "IconPicker";
     private TextView tvItemCount;
 
     private ArrayList<Icon> mIcons;
@@ -60,7 +62,8 @@ public class IconPickerActivity extends Activity implements
      * @return success/failure
      */
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         //Inflate the menu items for use in action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.icon_picker_activity_actions, menu);
@@ -69,9 +72,7 @@ public class IconPickerActivity extends Activity implements
         if (itemSave != null) {
             View v = itemSave.getActionView();
             if (v != null) {
-
                 tvItemCount = (TextView) v.findViewById(R.id.tvCount);
-
                 ImageView ivSave = (ImageView) v.findViewById(R.id.ivSave);
 
                 //Have to set this listener here
@@ -84,6 +85,14 @@ public class IconPickerActivity extends Activity implements
                     }
                 });
             }
+            else
+            {
+                Log.e(TAG, "View was null in itemSave.getActionView()");
+            }
+        }
+        else
+        {
+            Log.e(TAG, "Menu itemSave was null");
         }
         return super.onCreateOptionsMenu(menu);
     }
