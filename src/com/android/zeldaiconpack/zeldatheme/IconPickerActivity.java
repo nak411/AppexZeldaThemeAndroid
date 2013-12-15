@@ -1,6 +1,7 @@
 package com.android.zeldaiconpack.zeldatheme;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,14 +14,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.zeldaiconpack.zeldatheme.adapters.IconAdapter;
+import com.android.zeldaiconpack.zeldatheme.fragments.TaskFragment;
+import com.android.zeldaiconpack.zeldatheme.interfaces.TaskCallBacks;
 import com.android.zeldaiconpack.zeldatheme.structures.Icon;
 import com.zeldaiconpack.zeldatheme.R;
-
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -29,9 +29,10 @@ import java.util.HashSet;
  * nak411@gmail.com
  */
 public class IconPickerActivity extends Activity implements
-        AdapterView.OnItemClickListener {
+        AdapterView.OnItemClickListener, TaskCallBacks {
 
     private static String TAG = "IconPicker";
+    private TaskFragment mTaskFragment;
     private TextView tvItemCount;
 
     private ArrayList<Icon> mIcons;
@@ -125,48 +126,13 @@ public class IconPickerActivity extends Activity implements
      * Retrieves the drawables from res folder
      */
     private void retrieveResourceIds() {
+        FragmentManager fm = getFragmentManager();
+        mTaskFragment = (TaskFragment) fm.findFragmentByTag("task");
 
-        task = new AsyncTask<Void, Void, ArrayList<Icon>>() {
-            @Override
-            protected void onPreExecute() {
-                mLoading = true;
-                super.onPreExecute();
-                //do ui stuff here
-            }
-
-            @Override
-            protected ArrayList<Icon> doInBackground(Void... params) {
-                final Class<R.drawable> c = R.drawable.class;
-                final Field[] fields = c.getDeclaredFields();
-                ArrayList<Icon> icons = new ArrayList<Icon>();
-                for (Field field : fields) {
-                    final int resourceId;
-                    try {
-                        resourceId = field.getInt(null);
-                        String name = getResources().getResourceEntryName(resourceId);
-                        //Find a resources that starts with com or matches the 2 word pattern
-                        //Short circuit at "com_"
-                        if (name.startsWith("com_") || name.matches("\\w+_\\w+"))
-                            icons.add(new Icon(resourceId, name));
-                    } catch (Exception e) {
-                        continue;
-                    }
-                    if (isCancelled())
-                        break;
-                }
-                return icons;
-            }
-
-            @Override
-            protected void onPostExecute(ArrayList<Icon> icons) {
-                super.onPostExecute(icons);
-                //Do ui stuff here
-                mIcons.addAll(icons);
-                mAdapter.notifyDataSetChanged();
-                mLoading = false;
-            }
-        };
-        task.execute();
+        if(mTaskFragment ==null){
+            mTaskFragment = new TaskFragment();
+            fm.beginTransaction().add(mTaskFragment, "task").commit();
+        }
     }
 
     @Override
@@ -222,5 +188,37 @@ public class IconPickerActivity extends Activity implements
             counter--;
         }
         updateSelected(icon);
+    }
+
+    @Override
+    public void onPreExecute() {
+        mLoading = true;
+
+    }
+
+    @Override
+    public void onProgressUpdate(int percent) {
+
+    }
+
+    @Override
+    public void onCancelled() {
+
+    }
+
+    @Override
+    public void onPostExecute(Object result) {
+
+        if(result.getClass() == ArrayList.class){
+            ArrayList genArray = (ArrayList) result;
+            for(Object obj : genArray){
+                if(obj instanceof Icon){
+                    mIcons.add((Icon) obj);
+                }
+            }
+            mAdapter.notifyDataSetChanged();
+        }
+        mLoading = false;
+
     }
 }
