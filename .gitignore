@@ -10,3 +10,4 @@ gen/
 *.ap_
 *.class
 *.swp
+.gradle
