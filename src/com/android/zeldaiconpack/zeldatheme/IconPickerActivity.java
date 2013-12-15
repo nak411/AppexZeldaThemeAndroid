@@ -147,7 +147,6 @@ public class IconPickerActivity extends Activity implements
 
     /**
      * Use up navigation on devices using 4.0
-     *
      * @param item the item selected
      * @return true on false depending on action completion
      */
@@ -208,7 +207,6 @@ public class IconPickerActivity extends Activity implements
 
     @Override
     public void onPostExecute(Object result) {
-
         if(result.getClass() == ArrayList.class){
             ArrayList genArray = (ArrayList) result;
             for(Object obj : genArray){

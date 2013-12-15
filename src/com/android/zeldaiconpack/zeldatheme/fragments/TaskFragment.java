@@ -2,6 +2,7 @@ package com.android.zeldaiconpack.zeldatheme.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.android.zeldaiconpack.zeldatheme.interfaces.TaskCallBacks;
@@ -55,5 +56,16 @@ public class TaskFragment extends Fragment{
     public void onDetach() {
         super.onDetach();
         mCallBacks = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //Cancel the task if the fragment is destroyed before the task finishes
+        //The app was closed by the user
+        if(mTask !=null && ((mTask.getStatus() == AsyncTask.Status.RUNNING)
+                || (mTask.getStatus() == AsyncTask.Status.PENDING))){
+            mTask.cancel(true);
+        }
     }
 }
