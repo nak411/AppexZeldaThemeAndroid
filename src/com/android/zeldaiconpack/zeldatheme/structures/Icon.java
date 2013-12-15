@@ -9,7 +9,7 @@ public class Icon {
     public Integer resId;
     public boolean isSelected;
 
-    public Icon(Integer resId)
+    public Icon(Integer resId, String resName)
     {
         this.resId = resId;
         this.isSelected = false;

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.zeldaiconpack.zeldatheme.adapters.IconAdapter;
@@ -21,6 +22,7 @@ import com.zeldaiconpack.zeldatheme.R;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Created by Naveed on 11/30/13.
@@ -33,6 +35,7 @@ public class IconPickerActivity extends Activity implements
     private TextView tvItemCount;
 
     private ArrayList<Icon> mIcons;
+    private HashSet<Icon> mSelected;
     private boolean mLoading;
     private AsyncTask<Void, Void, ArrayList<Icon>> task;
     private IconAdapter mAdapter;
@@ -105,6 +108,7 @@ public class IconPickerActivity extends Activity implements
 
         if (mAdapter == null) {
             mAdapter = new IconAdapter(this, mIcons);
+            mSelected = new HashSet<Icon>();
             counter = 0;
             gvIcons.setAdapter(mAdapter);
             retrieveResourceIds();
@@ -143,7 +147,7 @@ public class IconPickerActivity extends Activity implements
                         //Find a resources that starts with com or matches the 2 word pattern
                         //Short circuit at "com_"
                         if (name.startsWith("com_") || name.matches("\\w+_\\w+"))
-                            icons.add(new Icon(resourceId));
+                            icons.add(new Icon(resourceId, name));
                     } catch (Exception e) {
                         continue;
                     }
@@ -195,8 +199,13 @@ public class IconPickerActivity extends Activity implements
     }
 
 
-    private void updateCount() {
+    private void updateSelected(Icon icon) {
         tvItemCount.setText(Integer.toString(counter));
+
+        if (icon.isSelected)
+            mSelected.add(icon);
+        else
+            mSelected.remove(icon);
     }
 
     @Override
@@ -212,6 +221,6 @@ public class IconPickerActivity extends Activity implements
             icon.isSelected = false;
             counter--;
         }
-        updateCount();
+        updateSelected(icon);
     }
 }
