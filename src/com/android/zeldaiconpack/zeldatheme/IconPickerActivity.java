@@ -3,7 +3,6 @@ package com.android.zeldaiconpack.zeldatheme;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
@@ -17,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.zeldaiconpack.zeldatheme.adapters.IconAdapter;
-import com.android.zeldaiconpack.zeldatheme.fragments.TaskFragment;
+import com.android.zeldaiconpack.zeldatheme.fragments.LoadIconsFragment;
 import com.android.zeldaiconpack.zeldatheme.interfaces.TaskCallBacks;
 import com.android.zeldaiconpack.zeldatheme.structures.Icon;
 import com.zeldaiconpack.zeldatheme.R;
@@ -32,15 +31,12 @@ public class IconPickerActivity extends Activity implements
         AdapterView.OnItemClickListener, TaskCallBacks {
 
     private static String TAG = "IconPicker";
-    private TaskFragment mTaskFragment;
+    private LoadIconsFragment mTaskFragment;
     private TextView tvItemCount;
 
     private ArrayList<Icon> mIcons;
     private HashSet<Icon> mSelected;
-    private boolean mLoading;
-    private AsyncTask<Void, Void, ArrayList<Icon>> task;
     private IconAdapter mAdapter;
-
     private int counter;
 
     @Override
@@ -51,11 +47,14 @@ public class IconPickerActivity extends Activity implements
         if (getActionBar() != null) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        Log.d("TASKMONITOR", "Called on Create of IconPickerActivity");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d("TASKMONITOR", "Called on Start of IconPickerActivity");
         initialize();
     }
 
@@ -72,6 +71,8 @@ public class IconPickerActivity extends Activity implements
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.icon_picker_activity_actions, menu);
         MenuItem itemSave = menu.findItem(R.id.btnSave);
+
+        Log.d("TASKMONITOR", "Called on Start of IconPickerActivity");
 
         if (itemSave != null) {
             View v = itemSave.getActionView();
@@ -119,7 +120,6 @@ public class IconPickerActivity extends Activity implements
         }
 
         gvIcons.setOnItemClickListener(this);
-        // ivSave.setOnClickListener(this);
     }
 
     /**
@@ -127,10 +127,10 @@ public class IconPickerActivity extends Activity implements
      */
     private void retrieveResourceIds() {
         FragmentManager fm = getFragmentManager();
-        mTaskFragment = (TaskFragment) fm.findFragmentByTag("task");
+        mTaskFragment = (LoadIconsFragment) fm.findFragmentByTag("task");
 
         if(mTaskFragment ==null){
-            mTaskFragment = new TaskFragment();
+            mTaskFragment = new LoadIconsFragment();
             fm.beginTransaction().add(mTaskFragment, "task").commit();
         }
     }
@@ -138,11 +138,7 @@ public class IconPickerActivity extends Activity implements
     @Override
     protected void onStop() {
         super.onStop();
-        if (mLoading) {
-            //Allow interruption
-            task.cancel(true);
-        }
-        task = null;
+        Log.d("TASKMONITOR", "Called on STOP of IconPickerActivity");
     }
 
     /**
@@ -191,8 +187,7 @@ public class IconPickerActivity extends Activity implements
 
     @Override
     public void onPreExecute() {
-        mLoading = true;
-
+        Log.d("TASKMONITOR", "Called on PreExecute of IconPickerActivity");
     }
 
     @Override
@@ -207,6 +202,7 @@ public class IconPickerActivity extends Activity implements
 
     @Override
     public void onPostExecute(Object result) {
+        Log.d("TASKMONITOR", "Called on PostExecute of IconPickerActivity");
         if(result.getClass() == ArrayList.class){
             ArrayList genArray = (ArrayList) result;
             for(Object obj : genArray){
@@ -216,7 +212,5 @@ public class IconPickerActivity extends Activity implements
             }
             mAdapter.notifyDataSetChanged();
         }
-        mLoading = false;
-
     }
 }

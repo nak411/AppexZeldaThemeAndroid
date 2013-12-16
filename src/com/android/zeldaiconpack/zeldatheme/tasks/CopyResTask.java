@@ -1,7 +1,6 @@
 package com.android.zeldaiconpack.zeldatheme.tasks;
 
 import android.app.Fragment;
-import android.os.AsyncTask;
 import com.android.zeldaiconpack.zeldatheme.interfaces.TaskCallBacks;
 import com.android.zeldaiconpack.zeldatheme.structures.Icon;
 import com.zeldaiconpack.zeldatheme.R;
@@ -12,25 +11,24 @@ import java.util.ArrayList;
 /**
  * Created by Naveed on 12/8/13.
  * nak411@gmail.com
+ *
+ * Concrete class for loading the resources from res folder
  */
-public class CopyResTask extends AsyncTask<Void, Integer, ArrayList<Icon>> {
+public class CopyResTask extends LoadContentTask<Void, Integer, ArrayList<Icon>> {
 
-    private TaskCallBacks mCallBacks;
     private Fragment mContext;
 
     public CopyResTask(TaskCallBacks mCallBacks, Fragment context) {
-        this.mCallBacks = mCallBacks;
+        super(mCallBacks);
         this.mContext = context;
     }
 
+    /**
+     * Loads the ids of Icons from resources
+     * @return array list of loading icons
+     */
     @Override
-    protected void onPreExecute() {
-        if (mCallBacks != null)
-            mCallBacks.onPreExecute();
-    }
-
-    @Override
-    protected ArrayList<Icon> doInBackground(Void... params) {
+    public ArrayList<Icon> loadData() {
         final Class<R.drawable> c = R.drawable.class;
         final Field[] fields = c.getDeclaredFields();
         ArrayList<Icon> icons = new ArrayList<Icon>();
@@ -50,24 +48,5 @@ public class CopyResTask extends AsyncTask<Void, Integer, ArrayList<Icon>> {
                 break;
         }
         return icons;
-
-    }
-
-    @Override
-    protected void onProgressUpdate(Integer... values) {
-        if (mCallBacks != null)
-            mCallBacks.onProgressUpdate(values[0]);
-    }
-
-    @Override
-    protected void onCancelled(ArrayList<Icon> icons) {
-        if (mCallBacks != null)
-            mCallBacks.onCancelled();
-    }
-
-    @Override
-    protected void onPostExecute(ArrayList<Icon> icons) {
-        if(mCallBacks!=null)
-            mCallBacks.onPostExecute(icons);
     }
 }
