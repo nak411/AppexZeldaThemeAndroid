@@ -87,6 +87,8 @@ public abstract class TaskFragment extends Fragment {
         if (!mLoading) {
             //Create and execute the task
             mTask = getTask();
+            //(Not sure how to get rid off the unchecked
+            // warning here)
             mTask.execute();
             mLoading = true;
         }
